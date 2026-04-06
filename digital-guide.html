@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מדריך דיגיטל | רקפת ספיר</title>
+<style>
+  :root {
+    --bg: #f4f6f9;
+    --white: #ffffff;
+    --border: #e8ecf0;
+    --text: #1a202c;
+    --muted: #6b7280;
+    --gold: #c9a84c;
+    --dark: #1a1714;
+    --radius: 14px;
+    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 28px rgba(0,0,0,0.14);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', 'Arial Hebrew', Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    direction: rtl;
+  }
+
+  /* ══ TOP BAR ══ */
+  #topbar {
+    background: var(--dark);
+    border-bottom: 3px solid var(--gold);
+    padding: 0 28px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  #topbar img {
+    height: 34px;
+    object-fit: contain;
+    filter: brightness(1.1);
+  }
+  #topbar .site-title {
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    flex: 1;
+  }
+  #topbar .site-title small {
+    display: block;
+    color: var(--gold);
+    font-size: 11px;
+    font-weight: 400;
+  }
+  #back-btn {
+    display: none;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.12);
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    padding: 7px 14px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  #back-btn:hover { background: rgba(255,255,255,0.2); }
+  #back-btn.visible { display: flex; }
+
+  /* ══ SCREENS ══ */
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* ══ HOME ══ */
+  #home {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 32px 24px 60px;
+  }
+
+  .home-greeting {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+  .home-greeting h1 {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .home-greeting p {
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 18px;
+  }
+
+  .cat-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 22px 20px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    box-shadow: var(--shadow);
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .cat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--card-color, #ccc);
+  }
+  .cat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 5px;
+    height: 100%;
+    background: var(--card-color, #ccc);
+    border-radius: 0 var(--radius) var(--radius) 0;
+  }
+  .cat-icon {
+    width: 52px; height: 52px;
+    border-radius: 12px;
+    background: var(--card-bg-light, #f0f0f0);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+    margin-bottom: 14px;
+  }
+  .cat-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--text);
+  }
+  .cat-sub {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .cat-arrow {
+    position: absolute;
+    bottom: 18px;
+    left: 18px;
+    color: var(--card-color, #ccc);
+    font-size: 18px;
+    opacity: 0.7;
+  }
+
+  /* ══ SECTION PAGE ══ */
+  #section-page {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 28px 24px 80px;
+  }
+
+  .page-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 28px;
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    box-shadow: var(--shadow);
+    border-right: 5px solid var(--page-color, #ccc);
+  }
+  .page-header-icon {
+    width: 56px; height: 56px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+    flex-shrink: 0;
+  }
+  .page-header-title {
+    font-size: 20px;
+    font-weight: 800;
+  }
+  .page-header-sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 3px;
+  }
+
+  /* ══ ACCORDION ══ */
+  .accordion {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 16px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .acc-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+  }
+  .acc-header:hover { background: #fafbfc; }
+  .acc-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .acc-title .acc-icon { font-size: 18px; }
+  .acc-chevron {
+    color: var(--muted);
+    font-size: 14px;
+    transition: transform 0.25s;
+  }
+  .accordion.open .acc-chevron { transform: rotate(180deg); }
+  .accordion.open .acc-header { background: #f8faff; }
+  .acc-body {
+    display: none;
+    padding: 0 20px 20px;
+    border-top: 1px solid var(--border);
+  }
+  .accordion.open .acc-body { display: block; }
+  .acc-body-inner { padding-top: 16px; }
+
+  /* ══ CREDENTIALS ══ */
+  .cred-box {
+    background: #f9fafb;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 14px;
+  }
+  .cred-label-top {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+  }
+  .cred-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 0;
+    border-bottom: 1px solid #eef0f2;
+  }
+  .cred-row:last-child { border-bottom: none; }
+  .cred-lbl { font-size: 12px; color: var(--muted); width: 80px; flex-shrink: 0; }
+  .cred-val {
+    flex: 1;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    color: #111;
+    direction: ltr;
+    text-align: center;
+  }
+  .copy-btn {
+    background: var(--gold);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: opacity 0.15s;
+  }
+  .copy-btn:hover { opacity: 0.82; }
+  .copy-btn.copied { background: #22c55e; }
+
+  /* ══ ALERT BOXES ══ */
+  .alert {
+    border-radius: 10px;
+    padding: 13px 16px;
+    margin-bottom: 14px;
+    font-size: 13.5px;
+    line-height: 1.65;
+    border-right: 4px solid;
+  }
+  .alert strong { display: block; margin-bottom: 3px; }
+  .alert-warn { background: #fffbeb; border-color: #f59e0b; color: #78350f; }
+  .alert-danger { background: #fef2f2; border-color: #ef4444; color: #7f1d1d; }
+  .alert-info { background: #eff6ff; border-color: #3b82f6; color: #1e3a8a; }
+  .alert-ok { background: #f0fdf4; border-color: #22c55e; color: #14532d; }
+
+  /* ══ STEPS ══ */
+  .steps { list-style: none; counter-reset: s; }
+  .steps li {
+    counter-increment: s;
+    display: flex;
+    gap: 12px;
+    margin-bottom: 10px;
+    font-size: 13.5px;
+    line-height: 1.6;
+    align-items: flex-start;
+  }
+  .steps li::before {
+    content: counter(s);
+    background: var(--gold);
+    color: #1a1714;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* ══ BULLETS ══ */
+  .blist { list-style: none; }
+  .blist li {
+    display: flex;
+    gap: 8px;
+    padding: 6px 0;
+    font-size: 13.5px;
+    line-height: 1.6;
+    border-bottom: 1px solid #f3f4f6;
+    align-items: flex-start;
+  }
+  .blist li:last-child { border-bottom: none; }
+  .blist li::before { content: '◆'; color: var(--gold); font-size: 9px; margin-top: 5px; flex-shrink: 0; }
+
+  /* ══ TABLE ══ */
+  .dtable { width: 100%; border-collapse: collapse; font-size: 13px; margin: 8px 0; }
+  .dtable th { background: #f1f5f9; padding: 9px 13px; text-align: right; font-weight: 700; font-size: 12px; color: var(--muted); }
+  .dtable td { padding: 9px 13px; border-bottom: 1px solid #f1f5f9; }
+  .dtable tr:last-child td { border-bottom: none; }
+
+  /* ══ INLINE CARD ══ */
+  .icard {
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+  }
+  .icard-title {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  /* ══ BADGE ══ */
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    margin: 3px;
+  }
+  .b-green { background: #dcfce7; color: #15803d; }
+  .b-yellow { background: #fef9c3; color: #a16207; }
+  .b-blue { background: #dbeafe; color: #1d4ed8; }
+
+  .mono { font-family: 'Courier New', monospace; background: #f1f5f9; padding: 1px 6px; border-radius: 4px; font-size: 12px; direction: ltr; display: inline-block; }
+  .hl { color: var(--gold); font-weight: 700; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 600px) { .grid2 { grid-template-columns: 1fr; } }
+
+  /* ══ DIVIDER ══ */
+  .sec-divider {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 18px 0 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ TOP BAR ══ -->
+<div id="topbar">
+  <img src="https://www.rhs.co.il/480084_7075.jpg" alt="RHS" onerror="this.style.display='none'">
+  <div class="site-title">
+    מדריך דיגיטל
+    <small>אחראית דיגיטל | רקפת ספיר</small>
+  </div>
+  <button id="back-btn" onclick="goHome()">← חזרה</button>
+</div>
+
+<!-- ══════════════════════════════ HOME ══════════════════════════════ -->
+<div id="screen-home" class="screen active">
+<div id="home">
+  <div class="home-greeting">
+    <h1>ברוכה הבאה למדריך הדיגיטל 👋</h1>
+    <p>בחרי נושא להתחיל</p>
+  </div>
+
+  <div class="category-grid">
+
+    <div class="cat-card" style="--card-color:#c9a84c;--card-bg-light:#fef9ee;" onclick="showPage('intro')">
+      <div class="cat-icon">🏠</div>
+      <div class="cat-title">מבוא ותשתית</div>
+      <div class="cat-sub">מיילים ראשיים, סיסמות, תיקיית דרייב</div>
+      <div class="cat-arrow">›</div>
+    </div>
+
+    <div class="cat-card" style="--card-color:#3b82f6;--card-bg-light:#eff6ff;" onclick="showPage('social')">
+      <div class="cat-icon">📱</div>
+      <div class="cat-title">רשתות חברתיות</div>
+      <div class="cat-sub">פייסבוק, אינסטגרם, טיקטוק, יוטיוב, גוגל לעסק</div>
+      <div class="cat-arrow">›</div>
+    </div>
+
+    <div class="cat-card" style="--card-color:#22c55e;--card-bg-light:#f0fdf4;" onclick="showPage('ads')">
+      <div class="cat-icon">💰</div>
+      <div class="cat-title">קמפיינים ממומנים</div>
+      <div class="cat-sub">Meta Ads, TikTok Ads, Google Ads</div>
+      <div class="cat-arrow">›</div>
+    </div>
+
+    <div class="cat-card" style="--card-color:#8b5cf6;--card-bg-light:#f5f3ff;" onclick="showPage('design')">
+      <div class="cat-icon">🎨</div>
+      <div class="cat-title">עיצוב ועריכה</div>
+      <div class="cat-sub">Canva, CapCut Pro</div>
+      <div class="cat-arrow">›</div>
+    </div>
+
+    <div class="cat-card" style="--card-color:#f59e0b;--card-bg-light:#fffbeb;" onclick="showPage('inventory')">
+      <div class="cat-icon">📦</div>
+      <div class="cat-title">מלאי וחשבונות</div>
+      <div class="cat-sub">CASH ON TAB, ביטול עסקאות (Gama)</div>
+      <div class="cat-arrow">›</div>
+    </div>
+
+    <div class="cat-card" style="--card-color:#ef4444;--card-bg-light:#fef2f2;" onclick="showPage('website')">
+      <div class="cat-icon">🌐</div>
+      <div class="cat-title">אתר האינטרנט</div>
+      <div class="cat-sub">ניהול 2ALL, הזמנות, הוספת מוצרים</div>
+      <div class="cat-arrow">›</div>
+    </div>
+
+    <div class="cat-card" style="--card-color:#ec4899;--card-bg-light:#fdf2f8;" onclick="showPage('partners')">
+      <div class="cat-icon">🤝</div>
+      <div class="cat-title">פלטפורמות שותפים</div>
+      <div class="cat-sub">סופר-פארם, דואר ישראל, קארדקום, SMS</div>
+      <div class="cat-arrow">›</div>
+    </div>
+
+    <div class="cat-card" style="--card-color:#06b6d4;--card-bg-light:#ecfeff;" onclick="showPage('monthly')">
+      <div class="cat-icon">📊</div>
+      <div class="cat-title">משימות חודשיות</div>
+      <div class="cat-sub">דיווח, יום הולדת לקוחות, נתוני שיווק</div>
+      <div class="cat-arrow">›</div>
+    </div>
+
+    <div class="cat-card" style="--card-color:#64748b;--card-bg-light:#f8fafc;" onclick="showPage('appendix')">
+      <div class="cat-icon">🗂️</div>
+      <div class="cat-title">נספחים</div>
+      <div class="cat-sub">מיילים נוספים, פלטפורמות, מערכות טכניות</div>
+      <div class="cat-arrow">›</div>
+    </div>
+
+  </div>
+</div>
+</div><!-- end screen-home -->
+
+<!-- ══════════════════════════════ PAGES ══════════════════════════════ -->
+<div id="screen-page" class="screen">
+<div id="section-page">
+  <div id="page-header" class="page-header">
+    <div id="page-icon" class="page-header-icon"></div>
+    <div>
+      <div id="page-title" class="page-header-title"></div>
+      <div id="page-sub" class="page-header-sub"></div>
+    </div>
+  </div>
+  <div id="page-content"></div>
+</div>
+</div><!-- end screen-page -->
+
+<script>
+// ══ COPY ══
+function copyText(btn, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓ הועתק';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'העתק'; btn.classList.remove('copied'); }, 1800);
+  });
+}
+
+// ══ ACCORDION ══
+function toggleAcc(el) {
+  const acc = el.closest('.accordion');
+  const isOpen = acc.classList.contains('open');
+  // close all in this page
+  document.querySelectorAll('#page-content .accordion').forEach(a => a.classList.remove('open'));
+  if (!isOpen) acc.classList.add('open');
+}
+
+// ══ NAVIGATION ══
+function goHome() {
+  document.getElementById('screen-home').classList.add('active');
+  document.getElementById('screen-page').classList.remove('active');
+  document.getElementById('back-btn').classList.remove('visible');
+  window.scrollTo(0,0);
+}
+
+function showPage(id) {
+  const page = PAGES[id];
+  if (!page) return;
+  document.getElementById('screen-home').classList.remove('active');
+  document.getElementById('screen-page').classList.add('active');
+  document.getElementById('back-btn').classList.add('visible');
+
+  document.getElementById('page-icon').textContent = page.icon;
+  document.getElementById('page-icon').style.background = page.bgLight;
+  document.getElementById('page-title').textContent = page.title;
+  document.getElementById('page-sub').textContent = page.sub || '';
+  document.getElementById('section-page').style.setProperty('--page-color', page.color);
+  document.getElementById('page-header').style.borderColor = page.color;
+
+  document.getElementById('page-content').innerHTML = page.html;
+  window.scrollTo(0,0);
+}
+
+// ══ HELPERS ══
+function acc(icon, title, html, open) {
+  return `<div class="accordion${open?' open':''}">
+    <div class="acc-header" onclick="toggleAcc(this)">
+      <div class="acc-title"><span class="acc-icon">${icon}</span>${title}</div>
+      <span class="acc-chevron">▼</span>
+    </div>
+    <div class="acc-body"><div class="acc-body-inner">${html}</div></div>
+  </div>`;
+}
+
+function cred(title, rows) {
+  // rows = [{label, value, copy}]
+  const inner = rows.map(r => `
+    <div class="cred-row">
+      <span class="cred-lbl">${r.label}</span>
+      <span class="cred-val">${r.value}</span>
+      ${r.copy !== false ? `<button class="copy-btn" onclick="copyText(this,'${r.value.replace(/'/g,"\\'")}')">העתק</button>` : ''}
+    </div>`).join('');
+  return `<div class="cred-box">
+    <div class="cred-label-top">🔐 ${title}</div>
+    ${inner}
+  </div>`;
+}
+
+function steps(items) {
+  return `<ol class="steps">${items.map(i=>`<li>${i}</li>`).join('')}</ol>`;
+}
+function blist(items) {
+  return `<ul class="blist">${items.map(i=>`<li>${i}</li>`).join('')}</ul>`;
+}
+
+// ══ PAGE DATA ══
+const PAGES = {
+
+  intro: {
+    icon:'🏠', title:'מבוא ותשתית דיגיטלית', sub:'מיילים ראשיים • פרטי אימות • תיקיית דרייב',
+    color:'#c9a84c', bgLight:'#fef9ee',
+    html: (() => {
+      let h = '';
+      h += `<div class="alert alert-warn"><strong>⚠️ דגש חשוב לפני שמתחילים!</strong>רוב הנכסים הדיגיטליים מקושרים לאחד משני המיילים הבאים. בכל אימות / שחזור סיסמה — פנה לתיבות אלו.</div>`;
+      h += acc('📧','מייל מדיה ראשי — פרסום ודיגיטל',
+        cred('mediarhs5@gmail.com',[
+          {label:'מייל', value:'mediarhs5@gmail.com'},
+          {label:'סיסמה', value:'9090rakefet'}
+        ]), true);
+      h += acc('📧','מייל גוגל אישי — ניהול וגיבוי',
+        cred('rakefet5353@gmail.com',[
+          {label:'מייל', value:'rakefet5353@gmail.com'},
+          {label:'סיסמה', value:'9091Rakefet@'}
+        ]));
+      h += acc('📁','תיקיית דרייב — לוגואים וטפסי אקסל',
+        `<a href="https://drive.google.com/drive/folders/16bcgtS2TwvwHI78Iz2oEEOUIRa3TzaLa" target="_blank" style="color:#2563eb;font-size:13px;word-break:break-all;">
+          https://drive.google.com/drive/folders/16bcgtS2TwvwHI78Iz2oEEOUIRa3TzaLa
+        </a>`);
+      return h;
+    })()
+  },
+
+  social: {
+    icon:'📱', title:'רשתות חברתיות', sub:'פייסבוק • אינסטגרם • טיקטוק • יוטיוב • גוגל לעסק',
+    color:'#3b82f6', bgLight:'#eff6ff',
+    html: (() => {
+      let h = '';
+
+      // Facebook
+      h += acc('📘','פייסבוק (Meta Business Suite)',
+        cred('פרטי גישה',[
+          {label:'משתמש', value:'rhs53@walla.com'},
+          {label:'סיסמה', value:'@1469rakefet'}
+        ]) +
+        `<div class="sec-divider">משימות יומיות</div>` +
+        steps([
+          '<strong>העלאת תוכן:</strong> פרסום פוסט יומי מגוון — תמונות, סרטון מוצר, סרטון של רקפת.',
+          `<strong>מענה לפניות:</strong> מענה ללידים, תגובות והודעות ב-Inbox / ווטסאפ. <a href="https://docs.google.com/spreadsheets/d/1N2YSErgo91fPvdqMxp8kaKJ0ajGkHDR_/edit" target="_blank" style="color:#2563eb;">→ טופס ריכוז לידים</a>`,
+          '<strong>הגדלת קהילה:</strong> שליחת Invite לכל מי שעשה לייק ועדיין לא חבר.',
+          '<strong>הפצה אורגנית (חשוב!):</strong> שיתוף הפוסט היומי בקבוצות רלוונטיות — אדריכלים, אימהות, יישובים סמוכים.'
+        ]) +
+        `<div class="sec-divider">סוגי תוכן לפרסום</div>` +
+        blist([
+          '<strong>סקירת מוצרים:</strong> יתרונות ושימושים, חדש / חזר למלאי / מבצעים.',
+          '<strong>סרטוני אווירה:</strong> ויזואליה של לייף סטייל ועיצוב הבית.',
+          '<strong>טיפים מקצועיים:</strong> ידע בתחום העיצוב שנותן ערך לעוקבים.',
+          '<strong>אישי:</strong> סרטונים של רקפת שמחברים את הקהל למותג.'
+        ]), true);
+
+      // Instagram
+      h += acc('📸','אינסטגרם',
+        cred('פרטי גישה',[
+          {label:'משתמש', value:'sappir_rakefet'},
+          {label:'סיסמה', value:'@1469rakefet'}
+        ]) +
+        `<div class="sec-divider">משימות שוטפות</div>` +
+        blist([
+          '<strong>סנכרון פוסטים:</strong> העלאה לפי לוח הזמנים כמו פייסבוק + # רלוונטיים.',
+          '<strong>סטורי:</strong> לפחות <strong class="hl">5 סטוריז ביום</strong> — מוצרים, מאחורי הקלעים, שיתוף פוסטים.',
+          '<strong>Reels:</strong> עריכה והעלאה של רילס דינמיים — הכלי המרכזי לחשיפה לקהל חדש.',
+          '<strong>מוזיקה טרנדית:</strong> שימוש בסאונדים ויראליים ברילס ובסטורי.'
+        ]));
+
+      // TikTok
+      h += acc('🎵','טיקטוק',
+        cred('פרטי גישה',[
+          {label:'מייל', value:'mediarhs5@gmail.com'},
+          {label:'סיסמה', value:'2525rakefet'}
+        ]) +
+        `<div class="alert alert-info" style="margin-top:12px;"><strong>📐 פורמט חובה</strong>כל הסרטונים — פורמט אנכי <strong>9:16</strong>. כל רילס שעולה לאינסטגרם — עולה גם לטיקטוק.</div>` +
+        blist([
+          'העלאת סרטונים בהתאם לתכנים שפורסמו בפייסבוק ובאינסטגרם.',
+          `הוספת האשטאגים: <span class="mono">#עיצוב_הבית</span> <span class="mono">#interior</span> <span class="mono">#homedecor</span>`
+        ]));
+
+      // YouTube
+      h += acc('▶️','יוטיוב',
+        cred('פרטי גישה',[
+          {label:'מייל', value:'rakefet5353@gmail.com'},
+          {label:'סיסמה', value:'9091Rakefet@'}
+        ]) +
+        `<div class="alert alert-ok" style="margin-top:12px;"><strong>💡 YouTube Shorts</strong>סרטונים קצרים (כמו טיקטוק) להעלות כ-"Shorts" — פורמט שמקבל חשיפה גבוהה מאוד.</div>`);
+
+      // GMB
+      h += acc('📍','גוגל לעסק שלי (Google My Business)',
+        `<div class="alert alert-info">הנכסים מקושרים למיילים הראשיים (ראי מבוא). לניהול: חיפוש שם העסק בגוגל.</div>` +
+        `<div class="grid2">
+          <div class="icard"><div class="icard-title">📍 סניף בילו</div><p style="font-size:13px;">רחוב המלך חסן 7, קרית עקרון</p><p style="font-size:13px;margin-top:6px;">📞 054-5326105</p></div>
+          <div class="icard"><div class="icard-title">📍 סניף חיפה</div><p style="font-size:13px;">מרקוני 22, צ'ק פוסט</p><p style="font-size:13px;margin-top:6px;">📞 054-5326437</p></div>
+        </div>` +
+        `<div class="sec-divider">משימות שוטפות</div>` +
+        blist([
+          '<strong>רענון ויזואלי (פעם בחודש):</strong> העלאת תמונות חדשות של הגלריה — מעלה את הדירוג בגוגל.',
+          '<strong>ניהול ביקורות:</strong> מעקב אחר ביקורות חדשות + מענה מנומס.',
+          '<strong>שליחת קישורי ביקורות:</strong> לשלוח ללקוחות מרוצים (ווטסאפ/מייל) קישור להוספת ביקורת חיובית.'
+        ]));
+
+      return h;
+    })()
+  },
+
+  ads: {
+    icon:'💰', title:'קמפיינים ממומנים', sub:'Meta Ads • TikTok Ads • Google Ads',
+    color:'#22c55e', bgLight:'#f0fdf4',
+    html: (() => {
+      let h = '';
+
+      // Meta Ads
+      h += acc('📘','Meta Ads (פייסבוק + אינסטגרם)',
+        `<div class="icard"><div class="icard-title">⚙️ מבנה הקמפיינים</div>` +
+        blist([
+          '<strong>סוג:</strong> מעורבות (Engagement) המניעה לשיחת WhatsApp.',
+          '<strong>תקציב:</strong> <strong class="hl">35 ₪ ליום</strong> לכל מודעה.',
+          '<strong>יעד:</strong> מחולק לפי סניפים — כל מודעה מפנה לווטסאפ הסניף הרלוונטי.'
+        ]) + '</div>' +
+        `<div class="sec-divider">קטגוריות פרסום (~10 קמפיינים במקביל)</div>
+        <div style="padding:4px 0 10px;">
+          <span class="badge b-green">קונסולות</span><span class="badge b-green">מראות</span>
+          <span class="badge b-green">כורסאות</span><span class="badge b-green">ספות</span>
+          <span class="badge b-green">מזנונים</span><span class="badge b-green">שולחנות סלון</span>
+          <span class="badge b-green">שידות איפור</span><span class="badge b-green">פינות אוכל</span>
+          <span class="badge b-yellow">חיסול תצוגות</span><span class="badge b-yellow">עודפים</span>
+        </div>` +
+        `<div class="sec-divider">KPIs — מדדים לניטור יומי</div>` +
+        blist([
+          '<strong>לידים:</strong> כמה פניות הגיעו ומה העלות לליד.',
+          '<strong>CTR:</strong> מתחת ל-<strong class="hl">1.5% → להחליף מודעה</strong>.',
+          '<strong>Creatives:</strong> החלפת ויזואלים או טקסטים במודעות שנשחקו.'
+        ]), true);
+
+      // TikTok Ads
+      h += acc('🎵','TikTok Ads',
+        cred('פרטי גישה — ads.tiktok.com',[
+          {label:'מייל', value:'mediarhs5@gmail.com'},
+          {label:'סיסמה', value:'@rakefet9090'}
+        ]) +
+        blist([
+          '<strong>תקציב יומי:</strong> <strong class="hl">70 ₪ ליום</strong>.',
+          '<strong>רענון מודעות (חובה!):</strong> להחליף סרטונים <strong>אחת לשבועיים</strong> לשמירת עלות נמוכה.'
+        ]));
+
+      // Google Ads
+      h += acc('🔍','Google Ads, Analytics & Data',
+        cred('מייל לכל מערכות גוגל',[
+          {label:'מייל', value:'mediarhs5@gmail.com'},
+          {label:'סיסמה', value:'9090rakefet'}
+        ]) +
+        `<div class="sec-divider">Google Ads</div>` +
+        blist([
+          '<strong>אסטרטגיה:</strong> קמפיין PMAX (Performance Max) — כל פלטפורמות גוגל.',
+          '<strong>תקציב:</strong> <strong class="hl">70 ₪ ליום</strong>.',
+          '<strong>סטטוס:</strong> המודעות לא היו פעילות עקב תקלה טכנית — הבעיה סודרה, ניתן להחזיר לפעילות.'
+        ]) +
+        `<div class="sec-divider">Google Merchant Center</div>` +
+        blist([
+          `<strong>כתובת:</strong> <a href="https://merchants.google.com" target="_blank" style="color:#2563eb;">merchants.google.com</a>`,
+          'ניהול פיד המוצרים שמופיע במודעות שופינג.',
+          'המערכת שואבת נתונים מ-Google Sheets ייעודי.'
+        ]) +
+        `<div class="sec-divider">כלי מדידה ובקרה</div>` +
+        blist([
+          '<strong>GA4:</strong> מעקב כניסות, מקורות תנועה ורכישות באתר. חשבון "רקפת ספיר".',
+          '<strong>Search Console:</strong> מעקב קידום אורגני (SEO).',
+          '<strong>GTM:</strong> ניהול קודי מעקב — פייסבוק, טיקטוק, גוגל.'
+        ]));
+
+      return h;
+    })()
+  },
+
+  design: {
+    icon:'🎨', title:'עיצוב ועריכה', sub:'Canva • CapCut Pro',
+    color:'#8b5cf6', bgLight:'#f5f3ff',
+    html: (() => {
+      let h = '';
+
+      h += acc('🎨','Canva',
+        cred('פרטי גישה',[
+          {label:'מייל', value:'mediarhs5@gmail.com'},
+          {label:'מנוי', value:'15$ לחודש', copy: false}
+        ]) +
+        `<div class="sec-divider">מדריך מידות לעבודה שוטפת</div>
+        <table class="dtable">
+          <thead><tr><th>#</th><th>שימוש</th><th>מידות</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>תמונות מוצרים לאתר</td><td><span class="mono">750×750 px</span></td></tr>
+            <tr><td>2</td><td>תמונת קטגוריה ראשית</td><td><span class="mono">703×722 px</span></td></tr>
+            <tr><td>3</td><td>פלקטים להדפסה</td><td><span class="mono">80×100 ס"מ</span></td></tr>
+          </tbody>
+        </table>`, true);
+
+      h += acc('🎬','CapCut Pro',
+        cred('פרטי גישה',[
+          {label:'מייל', value:'mediarhs5@gmail.com'},
+          {label:'מנוי', value:'229 ₪ לשנה', copy: false},
+          {label:'חידוש', value:'10/07/2026', copy: false}
+        ]) +
+        `<div class="alert alert-warn" style="margin-top:12px;"><strong>⚠️ חידוש מנוי</strong>לוודא שהתשלום עובר ב-10/07/2026 כדי לשמור על גישה לפיצ'רים של Pro.</div>`);
+
+      return h;
+    })()
+  },
+
+  inventory: {
+    icon:'📦', title:'מלאי וחשבונות', sub:'CASH ON TAB • ביטול עסקאות (Gama)',
+    color:'#f59e0b', bgLight:'#fffbeb',
+    html: (() => {
+      let h = '';
+
+      // Cash on Tab
+      h += acc('📦','CASH ON TAB — הנהלת חשבונות ומלאי',
+        `<div class="grid2">` +
+        cred('בק אופיס — ניהול שוטף',[
+          {label:'משתמש', value:'רקפת'},
+          {label:'חברה', value:'2563'},
+          {label:'סיסמה', value:'רקפת123'}
+        ]) +
+        cred('בק אופיס — מלאי',[
+          {label:'משתמש', value:'מלאי25'},
+          {label:'חברה', value:'2563'},
+          {label:'סיסמה', value:'מלאי25'}
+        ]) +
+        `</div>` +
+        `<div class="sec-divider">הקמת פריט חדש</div>` +
+        steps([
+          'תפריט פריטים → לחיצה על <strong>(+)</strong>.',
+          'הזנת קוד פריט ושם פריט.',
+          'לשונית תגיות: בחירת "פריטים לאתר" והתגית הרלוונטית.',
+          'לשונית מחירונים: עדכון "מחירון צרכן" → שמור.'
+        ]) +
+        `<div class="sec-divider">עדכוני מלאי ותנועות</div>` +
+        blist([
+          '<strong>ספירת מלאי:</strong> מזינים מחסן + שם עובד. בצד ימין פריט וכמות נוכחית.',
+          '<strong>העברה בין מחסנים:</strong> מזינים מחסן + עובד בשמאל. בימין: פריט וכמות.',
+          '<strong>קבלת מכולה (ת.מ רכש):</strong> מזינים "מחסן כנות" + עובד. לשונית פריטים — כמויות.'
+        ]) +
+        `<div class="sec-divider">הקמת עובד חדש</div>` +
+        steps([
+          'תפריט עובדים → <strong>(+)</strong>.',
+          'הזנת פרטי עובד + <strong>ת.ז אמיתית</strong> (קריטי לדיווחים).',
+          'הגדרות: שיוך ל"עובד", הנחה מקסימלית "100", סימון "קופאי", "פעיל", שיוך למחסן.'
+        ]) +
+        `<div class="alert alert-danger" style="margin-top:12px;"><strong>⚖️ דיווחים — חוק "חשבונית ישראל"</strong>לוודא ת.ז אמיתית לעובד המפיק + "מזהה מיסים" תקין ללקוח. חידוש טוקן: <strong>20.05</strong> | קוד: <span class="mono">RH1971</span></div>`, true);
+
+      // Gama
+      h += acc('↩️','ביטול עסקאות אשראי (Gama)',
+        `<div class="icard"><div class="icard-title">🔐 כניסה למערכת — op.gamaf.co.il/findingvouchers</div>` +
+        steps([
+          'לוחצים על <strong>"כניסת לקוחות"</strong>.',
+          'מזינים ת.ז. של רקפת.',
+          `מזינים 4 ספרות אחרונות של הנייד: <span class="mono">2277</span>`
+        ]) + '</div>' +
+        `<div class="sec-divider">שלבי ביטול עסקה</div>` +
+        steps([
+          'תפריט <strong>"מידע תפעולי"</strong>.',
+          'תפריט משנה: <strong>"איתור / ביטול שובר"</strong>.',
+          'הזן 4 ספרות אחרונות של כרטיס האשראי.',
+          'לחץ <strong>"הצג"</strong>.',
+          'אתר שובר → "לחץ להסבה/ביטול" → ביטול מלא/חלקי → הזן סכום + תשלומים → אישור.'
+        ]));
+
+      return h;
+    })()
+  },
+
+  website: {
+    icon:'🌐', title:'אתר האינטרנט', sub:'ניהול 2ALL • הזמנות • מוצרים',
+    color:'#ef4444', bgLight:'#fef2f2',
+    html: (() => {
+      let h = '';
+
+      h += acc('🌐','ניהול אתר (2ALL)',
+        cred(`פרטי גישה — <a href="https://2all.co.il/cms/sb_mainpage.aspx" target="_blank" style="color:#2563eb;">2all.co.il/cms</a>`,[
+          {label:'משתמש', value:'rakefetsapir'},
+          {label:'סיסמה', value:'rakefetsap'}
+        ]) +
+        blist([
+          'טלפון תמיכה: <strong>077-27000300</strong>',
+          `מייל תמיכה: <span class="mono">support@2all.co.il</span>`
+        ]) +
+        `<div class="alert alert-warn" style="margin-top:12px;"><strong>📅 חידוש אחסון שנתי — חודש ינואר</strong>עלות: <strong>1,920 ₪ + מע"מ</strong> (12 תשלומים). כולל דומיין, אחריות, תמיכה וגיבויים.</div>`, true);
+
+      h += acc('🛒','ניהול הזמנות',
+        blist([
+          '<strong>בדיקה יומית:</strong> ניהול חנות → ניהול הזמנות אתר.',
+          '<strong>הזמנות שלא הושלמו:</strong> ליצור קשר טלפוני לסייע בהשלמה.',
+          '<strong>הזמנה טלפונית:</strong> לקחת פרטי אשראי ולבצע סליקה ידנית בקארדקום/קופה.'
+        ]));
+
+      h += acc('📸','הוספת מוצר חדש לקטלוג',
+        `<div class="alert alert-info"><strong>📐 הכן מראש תמונות מרובעות 750×750 px דרך Canva</strong></div>` +
+        steps([
+          'ניהול חנות → ניהול מוצרים.',
+          'בחירת קטגוריה → "הוספת מוצרים / תמונות".',
+          'ADD FILES → טעינת תמונה ראשית.',
+          'עדכון: שם מוצר, מחיר, מחיר מבצע, דמי משלוח.',
+          '"תוכן למוצר" → הדבקת תיאור → פונט HEEBO גודל 17 → שמור.',
+          '"הוספת תתי תמונות" לזוויות נוספות.',
+          'שמור נתונים → סגור → שמור נתונים בסרגל העליון.'
+        ]));
+
+      h += acc('✏️','עריכת מוצר קיים',
+        steps([
+          'ניהול חנות → ניהול מוצרים.',
+          'חיפוש בסרגל למעלה לפי שם המוצר.',
+          'ביצוע שינויים בשורה / כפתור "תוכן למוצר".',
+          'שמור נתונים.'
+        ]));
+
+      return h;
+    })()
+  },
+
+  partners: {
+    icon:'🤝', title:'פלטפורמות שותפים', sub:'סופר-פארם • דואר ישראל • קארדקום • ישראכרט • SMS • Trustindex',
+    color:'#ec4899', bgLight:'#fdf2f8',
+    html: (() => {
+      let h = '';
+
+      // SuperPharm
+      h += acc('🏪','סופר-פארם (Mirakl)',
+        cred('פרטי גישה — Mirakl',[
+          {label:'מייל 1', value:'mediarhs5@gmail.com'},
+          {label:'סיסמה 1', value:'Orit9090!!!!'},
+          {label:'מייל 2', value:'rhssuperpay@gmail.com'},
+          {label:'סיסמה 2', value:'rhs5310798@!'},
+          {label:'איש קשר', value:'עידן | 052-7866100', copy: false}
+        ]) +
+        `<div class="sec-divider">טיפול בהזמנות</div>` +
+        steps([
+          '<strong>אישור הזמנה:</strong> הזמנות → בחירת ההזמנה → אישור. (פרטי לקוח מופיעים תוך 2-3 דקות)',
+          '<strong>הפקת חשבונית:</strong> פתיחת כרטיס לקוח באוטוסופט + חשבונית מס (ללא שב"א).',
+          '<strong>שילוח:</strong> דואר ישראל עם mediarhs5@gmail.com → "שליחות מדלת לדלת" → הזנת פרטים → הדפסת תעודה.',
+          '<strong>עדכון סטטוס:</strong> חזרה להזמנה ב-Mirakl → "נשלח" + מספר חבילה.'
+        ]) +
+        `<div class="sec-divider">מחירון דמי משלוח</div>
+        <table class="dtable">
+          <thead><tr><th>סוג</th><th>דירוג 1</th><th>דירוג 2</th><th>דירוג 3</th></tr></thead>
+          <tbody>
+            <tr><td>רגיל</td><td>55 ₪</td><td>99 ₪</td><td>149 ₪</td></tr>
+            <tr><td>גדול</td><td>199 ₪</td><td>299 ₪</td><td>399 ₪</td></tr>
+          </tbody>
+        </table>` +
+        `<div class="alert alert-danger" style="margin-top:12px;"><strong>⚠️ עדכון מבצעים חודשי — חובה!</strong>אחת לחודש לעדכן תאריכי מבצעים — אחרת המחירים יקפצו למחיר מלא.<br>ייצוא → עריכה באקסל → עדכון תאריכים (<span class="mono">YYYY.MM.DD</span>) → ייבוא.<br><strong>אזהרה: אין ללחוץ על "מחיקה והחלפה"!</strong></div>`, true);
+
+      // Israel Post
+      h += acc('📬','דואר ישראל — "החבילות שלי"',
+        cred('כניסה — israelpost.co.il',[
+          {label:'מייל', value:'mediarhs5@gmail.com'}
+        ]) +
+        `<div class="sec-divider">שלבי ביצוע שליחות</div>` +
+        steps([
+          'כניסה לאתר → "שליחות מדלת לדלת ללא מנוי".',
+          'בחירת האופציה האמצעית: <strong>"עלות חבילת משלוחים דיגיטלית משתלמת"</strong>.',
+          'לחיצה על <strong>"בוא נצא לדרך"</strong>.',
+          'הוספת נמען + פרטי הלקוח מהזמנה בסופר-פארם.',
+          'שם חברה: <strong>רקפת ספיר</strong> | כתובת: מחסן כנות / סניף בילו.',
+          'תיאום תאריך + שעה לאיסוף השליח → המשך.',
+          'אישור הזמנה → הדפסת תעודת משלוח → הדבקה על החבילה.'
+        ]));
+
+      // Cardcom
+      h += acc('💳','קארדקום — סליקה וביט',
+        cred('פרטי גישה — secure.cardcom.solutions',[
+          {label:'משתמש', value:'5mediarhs'},
+          {label:'סיסמה', value:'9090rakefet'},
+          {label:'תמיכה', value:'03-943-6100', copy: false}
+        ]) +
+        `<div class="sec-divider">חיוב / זיכוי ידני</div>` +
+        steps([
+          'פעילות שוטפת → "חיוב/זיכוי כרטיס אשראי".',
+          'הזנת פרטי כרטיס + סכום.',
+          'לחיצה <strong>"בצע עסקה"</strong>.',
+          '<strong>חשוב:</strong> לאחר כל חיוב/זיכוי — הפקת חשבונית תואמת באוטוסופט (ללא שב"א).'
+        ]) +
+        `<p style="font-size:13px;margin-top:10px;">לאיתור עסקאות: תפריט <strong>"דוחות סליקת אשראי"</strong>.</p>`);
+
+      // Isracard
+      h += acc('💳','ישראכרט — אתר צמרת (סליקה סופר-פארם)',
+        cred('פרטי גישה',[
+          {label:'משתמש', value:'o216281'},
+          {label:'מספר לקוח', value:'216281'},
+          {label:'סיסמה', value:'@Rakefet1469'}
+        ]) +
+        `<div class="sec-divider">שאלות אבטחה (שחזור סיסמה)</div>` +
+        blist([
+          'שם אם לפני נישואין: <strong>חמרי</strong>',
+          'בית ספר יסודי: <strong>וייצמן</strong>',
+          'חיית מחמד: <strong>לורי</strong>'
+        ]));
+
+      // SMS
+      h += acc('📱','דיוור SMS — InforU Mobile',
+        cred('פרטי גישה — inforu.co.il',[
+          {label:'משתמש', value:'5mediarhs'},
+          {label:'סיסמה', value:'@Rakefet9090'}
+        ]) +
+        `<div class="sec-divider">שליחת הודעות SMS</div>` +
+        steps([
+          'לחיצה על האייקון הצהוב: <strong>"שליחת הודעות SMS"</strong>.',
+          'הזנת טקסט (מקסימום <strong class="hl">268 תווים</strong>).',
+          'בחירת קבוצת לקוחות מצד שמאל.',
+          '<strong>שליחה לבדיקה</strong> למספר האישי לפני שליחה לכולם.',
+          'אישור ושליחה.'
+        ]) +
+        blist([
+          'יתרה נוכחית: <strong>54,743</strong> קרדיטים (מרץ 2026)',
+          'רכישה: 100,000 קרדיטים = <strong>1,200 ₪ + מע"מ</strong>',
+          'לרכישה: <strong>03-9415550</strong> (שלוחה 2)'
+        ]));
+
+      // Trustindex
+      h += acc('⭐','Trustindex — ניהול ביקורות',
+        cred('פרטי גישה — admin.trustindex.io',[
+          {label:'מייל', value:'mediarhs5@gmail.com'},
+          {label:'סיסמה', value:'yEed2W.XZ32F3!Y'}
+        ]) +
+        `<div class="alert alert-ok" style="margin-top:12px;"><strong>✅ תפעול אוטומטי לחלוטין</strong>המערכת מסתנכרנת מגוגל ומעדכנת ביקורות באתר אוטומטית. חידוש: <strong>23.12.2026</strong>. עלות: 65$ לשנה.</div>`);
+
+      return h;
+    })()
+  },
+
+  monthly: {
+    icon:'📊', title:'משימות חודשיות', sub:'ב-1 לכל חודש',
+    color:'#06b6d4', bgLight:'#ecfeff',
+    html: (() => {
+      let h = '';
+
+      h += acc('🎂','ניהול מועדון לקוחות — הטבות ימי הולדת',
+        steps([
+          'הפקת דוח ימי הולדת מאוטוסופט.',
+          'הזנת הנתונים לטבלה המשותפת בדרייב (לצוות המכירות בחנויות).',
+          `שליחת SMS ב-InforU לכל חוגגי החודש עם <strong class="hl">הטבת יום הולדת 30% הנחה</strong>.`
+        ]), true);
+
+      h += acc('📈','דוח שיווק ונתוני מכירות',
+        blist([
+          'מילוי נתוני מכירות מתוך מערכת הנהלת החשבונות.',
+          'מילוי הוצאות שיווק מתוך מנהל המודעות (פייסבוק, טיקטוק, גוגל).'
+        ]));
+
+      return h;
+    })()
+  },
+
+  appendix: {
+    icon:'🗂️', title:'נספחים', sub:'תיבות מייל נוספות • פלטפורמות פרסום • מערכות טכניות',
+    color:'#64748b', bgLight:'#f8fafc',
+    html: (() => {
+      let h = '';
+
+      h += acc('📧','תיבות מייל נוספות',
+        cred('מייל סניף נתניה',[
+          {label:'מייל', value:'rhsnatanya@gmail.com'},
+          {label:'סיסמה', value:'natanyarhs555'},
+          {label:'ת. לידה', value:'01/04/79', copy: false}
+        ]) +
+        cred('מייל קשרי אדריכלים',[
+          {label:'מייל', value:'rhsdesign7@gmail.com'},
+          {label:'סיסמה', value:'SB020498'}
+        ]) +
+        cred('ניהול דומיין (Walla)',[
+          {label:'משתמש', value:'rhs53@walla.com'},
+          {label:'סיסמה', value:'9090rakefet'}
+        ]), true);
+
+      h += acc('📢','פלטפורמות פרסום נוספות',
+        `<table class="dtable">
+          <thead><tr><th>פלטפורמה</th><th>מייל</th><th>סיסמה</th></tr></thead>
+          <tbody>
+            <tr><td>Outbrain</td><td><span class="mono">mediarhs5@gmail.com</span></td><td><span class="mono">Oritco25</span></td></tr>
+            <tr><td>Taboola</td><td><span class="mono">mediarhs5@gmail.com</span></td><td><span class="mono">Oritco25</span></td></tr>
+            <tr><td>Pinterest</td><td><span class="mono">mediarhs5@gmail.com</span></td><td><span class="mono">ronrhs555</span></td></tr>
+            <tr><td>LinkedIn</td><td><span class="mono">mediarhs5@gmail.com</span></td><td><span class="mono">ronrhs555</span></td></tr>
+          </tbody>
+        </table>`);
+
+      h += acc('🤖','מערכות טכניות',
+        cred('Virtual Spirit (בוט ראשי)',[
+          {label:'מייל', value:'mediarhs5@gmail.com'},
+          {label:'סיסמה', value:'238032c'}
+        ]));
+
+      return h;
+    })()
+  }
+
+};
+
+// open first accordion on page load
+document.addEventListener('click', e => {
+  // handled by toggleAcc
+});
+</script>
+</body>
+</html>
